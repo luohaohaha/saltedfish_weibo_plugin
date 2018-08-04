@@ -12,7 +12,7 @@
 Add this to your package's pubspec.yaml file:
 ```flutter
 dependencies:
-  saltedfish_weibo_plugin: "^0.0.3"
+  saltedfish_weibo_plugin: "^0.0.4"
 ```
 ### 2. Import
 ```flutter
@@ -48,7 +48,13 @@ SaltedfishWeiboSharePlugin.allInOneAuth();
 ```
 SaltedfishWeiboSharePlugin.shareToWeibo('我有一个小小的愿望，就是想和你……', '幸福，不是有多大的房子，也不是有多豪的车，幸福是生活中每个微小的愿望都成真。\n对于幸福的定义，不同的人有不同的理解于我而言，幸福就是和你一起去旅行。', 'http://www.17fxw.cn:4869/3efb5cfc0554461e18acf255cfd16733');
 ```
+- 状态说明
 
+    0——成功
+
+    -1——取消
+
+    1——失败
 ## License
     Copyright 2018 LuoHao
 
