@@ -12,7 +12,7 @@
 Add this to your package's pubspec.yaml file:
 ```flutter
 dependencies:
-  saltedfish_weibo_plugin: "^0.0.1"
+  saltedfish_weibo_plugin: "^0.0.3"
 ```
 ### 2. Import
 ```flutter

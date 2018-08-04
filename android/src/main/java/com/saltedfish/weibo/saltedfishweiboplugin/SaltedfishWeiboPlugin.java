@@ -58,6 +58,8 @@ public class SaltedfishWeiboPlugin implements MethodCallHandler, PluginRegistry.
   public void onMethodCall(MethodCall call, Result result) {
     this.mCurrentResult = result;
     String method = call.method;
+    mRegistrar.addActivityResultListener(this);
+    mRegistrar.addNewIntentListener(this);
     Map<String,String> ag = (Map<String, String>) call.arguments;
     switch (method){
       case "install":
@@ -85,7 +87,7 @@ public class SaltedfishWeiboPlugin implements MethodCallHandler, PluginRegistry.
     checkAuthHandler();
     System.out.print("==========onActivityResult===========");
     mAuthHandler.authorizeCallBack(requestCode, resultCode, data);
-    return false;
+    return true;
   }
 
   @Override
@@ -93,7 +95,7 @@ public class SaltedfishWeiboPlugin implements MethodCallHandler, PluginRegistry.
     checkShareHandler();
     System.out.print("==========onNewIntent===========");
     mShareHandler.doResultIntent(intent, mShareCallback);
-    return false;
+    return true;
   }
 
   private WbShareCallback mShareCallback = new WbShareCallback() {
@@ -117,7 +119,7 @@ public class SaltedfishWeiboPlugin implements MethodCallHandler, PluginRegistry.
       resultMap.put("type", "share");
       resultMap.put("resultCode", "-1");
       resultMap.put("resultMsg", "分享取消");
-      mCurrentResult.error(null, null, resultMap);
+      mCurrentResult.success(resultMap);
 
     }
 
@@ -130,7 +132,7 @@ public class SaltedfishWeiboPlugin implements MethodCallHandler, PluginRegistry.
       resultMap.put("type", "share");
       resultMap.put("resultCode", "1");
       resultMap.put("resultMsg", "分享错误");
-      mCurrentResult.error(null, null, resultMap);
+      mCurrentResult.success(resultMap);
     }
   };
 
@@ -157,7 +159,7 @@ public class SaltedfishWeiboPlugin implements MethodCallHandler, PluginRegistry.
       resultMap.put("type", "auth");
       resultMap.put("resultCode", "-1");
       resultMap.put("resultMsg", "授权取消");
-      mCurrentResult.error(null, null, resultMap);
+      mCurrentResult.success(resultMap);
     }
 
     @Override
@@ -167,9 +169,9 @@ public class SaltedfishWeiboPlugin implements MethodCallHandler, PluginRegistry.
       System.out.print("==========onFailure==========="+wbConnectErrorMessage.getErrorCode()+wbConnectErrorMessage.getErrorMessage());
       Map<String, String> resultMap = new HashMap<String,String>();
       resultMap.put("type", "auth");
-      resultMap.put("resultCode", wbConnectErrorMessage.getErrorCode());
+      resultMap.put("resultCode", "1");
       resultMap.put("resultMsg", wbConnectErrorMessage.getErrorMessage());
-      mCurrentResult.error(null, null, resultMap);
+      mCurrentResult.success(resultMap);
     }
   };
 

@@ -1,8 +1,11 @@
 name: saltedfish_weibo_plugin
 description: a flutter plugin for sina weibo
-version: 0.0.1
-author:luohaohaha@gmail.com
-homepage:
+version: 0.0.3
+author: luohao<luohaohaha@gmail.com>
+homepage: https://github.com/luohaohaha/saltedfish_weibo_plugin
+environment:
+  sdk: ">=1.19.0-dev.28.0 <3.0.0"
+  flutter: ">=0.1.4 <2.0.0"
 
 dependencies:
   flutter:
