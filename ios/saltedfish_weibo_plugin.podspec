@@ -15,7 +15,7 @@ a flutter plugin for sina weibo
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  
+  s.dependency 'Weibo_SDK'
   s.ios.deployment_target = '8.0'
 end
 

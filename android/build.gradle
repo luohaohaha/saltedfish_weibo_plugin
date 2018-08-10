@@ -1,3 +1,5 @@
+package android
+
 group 'com.saltedfish.weibo.saltedfishweiboplugin'
 version '1.0-SNAPSHOT'
 
