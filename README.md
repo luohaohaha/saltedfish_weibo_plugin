@@ -44,7 +44,7 @@ SaltedfishWeiboSharePlugin.allInOneAuth();
 ```
 -  分享
 
-参数依次为标题，内容，图片(目前仅支持单张)
+参数依次为标题，内容，图片(目前仅支持单张),页面url
 ```
 SaltedfishWeiboPlugin.shareToWeibo(
                     '12345678',
