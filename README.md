@@ -46,7 +46,10 @@ SaltedfishWeiboSharePlugin.allInOneAuth();
 
 参数依次为标题，内容，图片(目前仅支持单张)
 ```
-SaltedfishWeiboSharePlugin.shareToWeibo('我有一个小小的愿望，就是想和你……', '幸福，不是有多大的房子，也不是有多豪的车，幸福是生活中每个微小的愿望都成真。\n对于幸福的定义，不同的人有不同的理解于我而言，幸福就是和你一起去旅行。', 'http://www.17fxw.cn:4869/3efb5cfc0554461e18acf255cfd16733');
+SaltedfishWeiboPlugin.shareToWeibo(
+                    '12345678',
+                    '2月18日，在各种期待和质疑声中，Apple Pay正式登陆中国，无需联网，甚至不用打开手机屏幕，只要把手机或者iwatch靠近pos机，验证一下指纹，叮咚一声，钱就付了。尽管遭到很多人吐槽：支付三秒钟，绑卡三小时，但令人崩溃的绑卡过程并没减少大家对Apple Pay的热情，据悉，上线第一天Apple Pay的绑卡数量就超过3000万张...',
+                    'http://www.17fxw.cn/wts/images/3c21405c29fcdaf7ce6b0ab2c2d4232e','http://www.17fxw.cn/wts/wx/art/detail/7c5b3d90550211e885d8514f3ad721ba');
 ```
 - 状态说明
 
