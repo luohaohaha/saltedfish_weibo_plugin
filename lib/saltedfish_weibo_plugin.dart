@@ -11,7 +11,7 @@ class SaltedfishWeiboPlugin {
     var resultMap = await _channel.invokeMethod('install',
         {'appId': appId, 'redirectUrl': redirectUrl, 'scope': scope});
 
-    return resultMap['resultCode'];
+    return resultMap;
   }
 
   static Future<dynamic> webAuth() async {

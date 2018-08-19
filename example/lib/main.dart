@@ -9,8 +9,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String WTS_SHARE_SINA_APP_KEY = "4078126022";
-  final String WTS_SHARE_SINA_REDIRECT_URL = "http://www.17fxw.cn/";
+  final String WTS_SHARE_SINA_APP_KEY = "2045436852";
+  final String WTS_SHARE_SINA_REDIRECT_URL = "https://www.sina.com";
   final String WTS_SHARE_SINA_SCOPE =
       "email,direct_messages_read,direct_messages_write,friendships_groups_read,friendships_groups_write,statuses_to_me_read,follow_app_official_microblog,invitation_write";
 
@@ -36,7 +36,9 @@ class _MyAppState extends State<MyApp> {
                 padding: EdgeInsets.all(16.0),
               ),
               onTap: () {
-                SaltedfishWeiboPlugin.webAuth();
+                SaltedfishWeiboPlugin.webAuth().then((map){
+                  print(map);
+                });
               },
             ),
             InkWell(

@@ -10,7 +10,7 @@
 - (instancetype)init
 {
     self = [super init];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleOpenURL:)
                                                  name:@"Weibo"
@@ -38,7 +38,7 @@
     //  }
     if ([@"install" isEqualToString:call.method]) {
         [self install:call];
-         _redirectUrl = call.arguments[@"redirectUrl"];
+        _redirectUrl = call.arguments[@"redirectUrl"];
         
     }
     else if([@"webAuth" isEqualToString:call.method] ||[@"ssoAuth" isEqualToString:call.method] ||[@"allInOneAuth" isEqualToString:call.method]){
@@ -51,8 +51,13 @@
 }
 
 - (void)install:(FlutterMethodCall*)call{
-    [WeiboSDK registerApp:call.arguments[@"appId"]];
+    NSMutableDictionary *dic =  [NSMutableDictionary dictionary];
+    [dic setValue:@"install" forKey:@"type"];
+    BOOL success = [WeiboSDK registerApp:call.arguments[@"appId"]];
     [WeiboSDK enableDebugMode:YES];
+    [dic setValue:@"install" forKey:@"type"];
+    [dic setValue:success?@"0":@"1" forKey:@"resultCode"];
+    res(dic);
 }
 
 - (void)auth:(FlutterMethodCall*)call{
@@ -76,7 +81,7 @@
     webpage.objectID = @"identifier1";
     webpage.title = [NSString stringWithFormat:@"%@\n%@",call.arguments[@"title"],call.arguments[@"content"]];
     webpage.webpageUrl = call.arguments[@"webPageUrl"];
-//    webpage.description = call.arguments[@"content"];
+    //    webpage.description = call.arguments[@"content"];
     
     // 多媒体内容缩略图
     NSData* data=[NSData dataWithContentsOfURL:[NSURL URLWithString:call.arguments[@"imageUrl"]]];
@@ -85,23 +90,19 @@
     // webpage.webpageUrl = @"http://sina.cn?a=1";
     // 消息的多媒体内容
     message.mediaObject = webpage;
-//    WBImageObject *image = [WBImageObject object];
-//    image.imageData =[NSData dataWithContentsOfURL :[NSURL URLWithString : call.arguments[@"imageUrl"]]];
-//    message.imageObject = image;
+    //    WBImageObject *image = [WBImageObject object];
+    //    image.imageData =[NSData dataWithContentsOfURL :[NSURL URLWithString : call.arguments[@"imageUrl"]]];
+    //    message.imageObject = image;
     WBSendMessageToWeiboRequest * request =[WBSendMessageToWeiboRequest requestWithMessage : message authInfo : nil access_token : nil];
     [WeiboSDK sendRequest : request];
 }
 
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
-    return [WeiboSDK handleOpenURL:url delegate:self];
-}
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options{
-    return [WeiboSDK handleOpenURL:url delegate:self];
-}
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
-    return [WeiboSDK handleOpenURL:url delegate:self];
+-(BOOL)handleOpenURL:(NSNotification *)aNotification
+{
+    NSString * aURLString =  [aNotification userInfo][@"url"];
+    NSURL * aURL = [NSURL URLWithString:aURLString];
+    return [WeiboSDK handleOpenURL:aURL delegate:self];
+    
 }
 
 #pragma mark - 压缩图片
@@ -143,6 +144,59 @@
     
     return data;
 }
+
+#pragma mark -- WeiboSDKDelegate
+- (void)didReceiveWeiboResponse:(WBBaseResponse *)response {
+    NSLog(@"%ld", response.statusCode);
+    
+    int statuCode = response.statusCode;
+    NSMutableDictionary *dic =  [NSMutableDictionary dictionary];
+    if ([response isKindOfClass:WBSendMessageToWeiboResponse.class])
+    {
+        [dic setValue:@"share" forKey:@"type"];
+        //cancel
+        if(-1 == statuCode){
+            [dic setValue:@"-1" forKey:@"resultCode"];
+            [dic setValue:@"分享取消" forKey:@"resultMsg"];
+            res(dic);
+            
+          
+        }else if(0 == statuCode){
+            [dic setValue:@"0" forKey:@"resultCode"];
+            res(dic);
+        }else{
+            [dic setValue:[NSString stringWithFormat:@"%d", statuCode] forKey:@"resultCode"];
+            [dic setValue:@"分享错误" forKey:@"resultMsg"];
+            res(dic);
+        }
+        
+    }
+    else if ([response isKindOfClass:WBAuthorizeResponse.class])
+    {
+        [dic setValue:@"auth" forKey:@"type"];
+        if(-1 == statuCode){
+            [dic setValue:@"-1" forKey:@"resultCode"];
+            [dic setValue:@"授权取消" forKey:@"resultMsg"];
+            res(dic);
+            
+            
+        }else if(0 == statuCode){
+            [dic setValue:@"0" forKey:@"resultCode"];
+            [dic setValue:[(WBAuthorizeResponse *)response accessToken] forKey:@"resultMsg"];
+            res(dic);
+        }else{
+            [dic setValue:[NSString stringWithFormat:@"%d", statuCode] forKey:@"resultCode"];
+            [dic setValue:@"授权错误" forKey:@"resultMsg"];
+            res(dic);
+        }
+    }
+}
+
+- (void)didReceiveWeiboRequest:(WBBaseRequest *)request {
+    
+}
+
 @end
+
 
 
